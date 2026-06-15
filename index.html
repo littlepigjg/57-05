@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简谱编辑器</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>简谱编辑器</h1>
+            <div class="toolbar">
+                <div class="tool-group">
+                    <label>音调：</label>
+                    <select id="keySelect">
+                        <option value="C">C调</option>
+                        <option value="D">D调</option>
+                        <option value="E">E调</option>
+                        <option value="F">F调</option>
+                        <option value="G" selected>G调</option>
+                        <option value="A">A调</option>
+                        <option value="B">B调</option>
+                    </select>
+                </div>
+                <div class="tool-group">
+                    <label>拍号：</label>
+                    <select id="timeSignature">
+                        <option value="2/4">2/4</option>
+                        <option value="3/4">3/4</option>
+                        <option value="4/4" selected>4/4</option>
+                        <option value="6/8">6/8</option>
+                    </select>
+                </div>
+                <div class="tool-group">
+                    <label>速度：</label>
+                    <input type="number" id="tempoInput" value="120" min="40" max="240" style="width: 60px;">
+                    <span>BPM</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <aside class="left-panel">
+                <h3>音符工具</h3>
+                <div class="note-tools">
+                    <div class="tool-row">
+                        <span class="tool-label">音高：</span>
+                        <div class="note-buttons">
+                            <button class="note-btn" data-pitch="1">1</button>
+                            <button class="note-btn" data-pitch="2">2</button>
+                            <button class="note-btn" data-pitch="3">3</button>
+                            <button class="note-btn" data-pitch="4">4</button>
+                            <button class="note-btn" data-pitch="5">5</button>
+                            <button class="note-btn" data-pitch="6">6</button>
+                            <button class="note-btn" data-pitch="7">7</button>
+                        </div>
+                    </div>
+                    <div class="tool-row">
+                        <span class="tool-label">八度：</span>
+                        <div class="octave-buttons">
+                            <button class="octave-btn active" data-octave="-1">低音</button>
+                            <button class="octave-btn active" data-octave="0">中音</button>
+                            <button class="octave-btn" data-octave="1">高音</button>
+                        </div>
+                    </div>
+                    <div class="tool-row">
+                        <span class="tool-label">时值：</span>
+                        <div class="duration-buttons">
+                            <button class="duration-btn" data-duration="4">全音符</button>
+                            <button class="duration-btn" data-duration="2">二分音符</button>
+                            <button class="duration-btn active" data-duration="1">四分音符</button>
+                            <button class="duration-btn" data-duration="0.5">八分音符</button>
+                            <button class="duration-btn" data-duration="0.25">十六分音符</button>
+                        </div>
+                    </div>
+                    <div class="tool-row">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="dottedCheck"> 附点
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="tieCheck"> 连音线
+                        </label>
+                    </div>
+                    <div class="tool-row">
+                        <button id="addBarLineBtn" class="action-btn">添加小节线</button>
+                        <button id="addRestBtn" class="action-btn">添加休止符</button>
+                        <button id="deleteBtn" class="action-btn danger">删除选中</button>
+                        <button id="clearBtn" class="action-btn danger">清空乐谱</button>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 20px;">播放控制</h3>
+                <div class="playback-controls">
+                    <button id="playBtn" class="play-btn">▶ 播放</button>
+                    <button id="pauseBtn" class="play-btn">⏸ 暂停</button>
+                    <button id="stopBtn" class="play-btn">⏹ 停止</button>
+                    <div class="progress-bar">
+                        <div id="progressFill" class="progress-fill"></div>
+                    </div>
+                    <span id="timeDisplay">0:00 / 0:00</span>
+                </div>
+
+                <h3 style="margin-top: 20px;">导出</h3>
+                <div class="export-controls">
+                    <button id="exportImageBtn" class="export-btn">导出图片</button>
+                    <button id="exportMidiBtn" class="export-btn">导出MIDI</button>
+                </div>
+            </aside>
+
+            <main class="center-panel">
+                <div class="score-container" id="scoreContainer">
+                    <canvas id="scoreCanvas"></canvas>
+                </div>
+            </main>
+
+            <aside class="right-panel">
+                <h3>操作说明</h3>
+                <ul class="instructions">
+                    <li>点击谱面空白处添加当前工具选择的音符</li>
+                    <li>点击已有的音符可以选中进行编辑或删除</li>
+                    <li>选中音符后按Delete键可删除</li>
+                    <li>拖动音符可改变位置</li>
+                    <li>点击小节线可调整位置</li>
+                </ul>
+                <h3 style="margin-top: 20px;">音符列表</h3>
+                <div id="noteList" class="note-list"></div>
+            </aside>
+        </div>
+    </div>
+
+    <script src="js/utils/NoteUtils.js"></script>
+    <script src="js/utils/MidiUtils.js"></script>
+    <script src="js/models/Note.js"></script>
+    <script src="js/models/BarLine.js"></script>
+    <script src="js/ScoreRenderer.js"></script>
+    <script src="js/NoteEditor.js"></script>
+    <script src="js/AudioSynthesizer.js"></script>
+    <script src="js/PlaybackController.js"></script>
+    <script src="js/MidiExporter.js"></script>
+    <script src="js/ImageExporter.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
