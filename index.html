@@ -101,6 +101,15 @@
                     <span id="timeDisplay">0:00 / 0:00</span>
                 </div>
 
+                <h3 style="margin-top: 20px;">文件导入</h3>
+                <div class="import-controls">
+                    <button id="importBtn" class="import-btn">📂 导入乐谱文件</button>
+                    <input type="file" id="importFileInput" accept=".mid,.midi,.xml,.musicxml,.mxl" style="display:none;">
+                    <div class="import-hint">
+                        支持 MIDI (.mid/.midi)、MusicXML (.xml/.musicxml/.mxl) 格式
+                    </div>
+                </div>
+
                 <h3 style="margin-top: 20px;">导出</h3>
                 <div class="export-controls">
                     <button id="exportImageBtn" class="export-btn">导出图片</button>
@@ -129,6 +138,43 @@
         </div>
     </div>
 
+    <div id="importModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="importModalTitle">导入乐谱</h3>
+                <button id="importModalClose" class="modal-close">×</button>
+            </div>
+            <div class="modal-body" id="importModalBody">
+                <div id="importProgressSection">
+                    <div class="progress-info" id="importProgressMessage">准备导入...</div>
+                    <div class="progress-bar-large">
+                        <div id="importProgressFill" class="progress-fill-large"></div>
+                    </div>
+                    <div class="progress-percent" id="importProgressPercent">0%</div>
+                </div>
+                <div id="importResultSection" style="display:none;">
+                    <div id="importResultIcon" class="result-icon"></div>
+                    <div id="importResultTitle" class="result-title"></div>
+                    <div id="importResultMessage" class="result-message"></div>
+                    <div id="importResultDetails" class="result-details"></div>
+                    <div id="importResultWarnings" class="result-warnings"></div>
+                    <div class="result-actions">
+                        <button id="importConfirmBtn" class="modal-btn primary">确认导入</button>
+                        <button id="importCancelBtn" class="modal-btn">取消</button>
+                    </div>
+                </div>
+                <div id="importErrorSection" style="display:none;">
+                    <div class="result-icon error-icon">✕</div>
+                    <div class="result-title error-title">导入失败</div>
+                    <div id="importErrorMessage" class="result-message error-message"></div>
+                    <div class="result-actions">
+                        <button id="importErrorCloseBtn" class="modal-btn primary">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="js/utils/NoteUtils.js"></script>
     <script src="js/utils/MidiUtils.js"></script>
     <script src="js/models/Note.js"></script>
@@ -138,6 +184,9 @@
     <script src="js/AudioSynthesizer.js"></script>
     <script src="js/PlaybackController.js"></script>
     <script src="js/MidiExporter.js"></script>
+    <script src="js/MidiImporter.js"></script>
+    <script src="js/MusicXmlImporter.js"></script>
+    <script src="js/ScoreImporter.js"></script>
     <script src="js/ImageExporter.js"></script>
     <script src="js/app.js"></script>
 </body>
